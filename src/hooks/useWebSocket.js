@@ -9,19 +9,16 @@ const useWebSocket = (url) => {
     const ws = new WebSocket(url);
 
     ws.onopen = () => {
-      console.log("WebSocket connected");
       setIsConnected(true);
       setSocket(ws);
     };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log("Received:", data);
       setLastMessage(data);
     };
 
     ws.onclose = () => {
-      console.log("WebSocket disconnected");
       setIsConnected(false);
       setSocket(null);
     };
@@ -49,4 +46,3 @@ const useWebSocket = (url) => {
 };
 
 export default useWebSocket;
-

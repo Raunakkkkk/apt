@@ -20,9 +20,6 @@ function init() {
   });
 
   wss.on("connection", (ws, req) => {
-    console.log(
-      `🔌 New WebSocket client connected from ${req.socket.remoteAddress}`
-    );
     clients.add(ws);
 
     // Send welcome message
@@ -38,7 +35,6 @@ function init() {
     ws.on("message", (message) => {
       try {
         const data = JSON.parse(message);
-        console.log("📨 Received from client:", data);
 
         // Echo back for now (can be extended)
         ws.send(
@@ -55,7 +51,6 @@ function init() {
 
     // Handle client disconnect
     ws.on("close", () => {
-      console.log("🔌 Client disconnected");
       clients.delete(ws);
     });
 
@@ -69,8 +64,6 @@ function init() {
   wss.on("error", (error) => {
     console.error("❌ WebSocket Server error:", error);
   });
-
-  console.log(`🔌 WebSocket server listening on port ${config.server.wsPort}`);
 }
 
 /**
@@ -87,8 +80,6 @@ function broadcastDatabaseChange(channel, payload) {
     data: payload,
     timestamp: Date.now(),
   });
-
-  console.log(`📡 Broadcasting to ${clients.size} clients:`, payload);
 
   clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -122,8 +113,6 @@ function startHeartbeat() {
       }
     });
   }, 30000); // Every 30 seconds
-
-  console.log("💓 WebSocket heartbeat started");
 }
 
 /**
@@ -147,7 +136,6 @@ async function close() {
 
       // Close the server
       wss.close(() => {
-        console.log("🔌 WebSocket server closed");
         resolve();
       });
     } else {
@@ -174,4 +162,3 @@ module.exports = {
   close,
   getStats,
 };
-

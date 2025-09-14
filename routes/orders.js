@@ -16,7 +16,6 @@ router.get("/", async (req, res) => {
     const orders = await database.getAllOrders();
     res.json(orders);
   } catch (error) {
-    console.error("Error fetching orders:", error);
     res.status(500).json({
       error: "Failed to fetch orders",
       details: error.message,
@@ -53,7 +52,6 @@ router.post("/", async (req, res) => {
     );
     res.status(201).json(order);
   } catch (error) {
-    console.error("Error creating order:", error);
     res.status(500).json({
       error: "Failed to create order",
       details: error.message,
@@ -95,7 +93,6 @@ router.put("/:id", async (req, res) => {
 
     res.json(updatedOrder);
   } catch (error) {
-    console.error("Error updating order:", error);
     res.status(500).json({
       error: "Failed to update order",
       details: error.message,
@@ -128,7 +125,6 @@ router.delete("/:id", async (req, res) => {
       order: deletedOrder,
     });
   } catch (error) {
-    console.error("Error deleting order:", error);
     res.status(500).json({
       error: "Failed to delete order",
       details: error.message,
@@ -161,7 +157,6 @@ router.get("/:id", async (req, res) => {
 
     res.json(order);
   } catch (error) {
-    console.error("Error fetching order:", error);
     res.status(500).json({
       error: "Failed to fetch order",
       details: error.message,
@@ -191,7 +186,6 @@ router.get("/status/:status", async (req, res) => {
 
     res.json(result.rows);
   } catch (error) {
-    console.error("Error fetching orders by status:", error);
     res.status(500).json({
       error: "Failed to fetch orders by status",
       details: error.message,
@@ -200,4 +194,3 @@ router.get("/status/:status", async (req, res) => {
 });
 
 module.exports = router;
-

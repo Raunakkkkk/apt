@@ -66,6 +66,7 @@ npm run dev  # Starts both backend and frontend
 ### 3. Environment (Optional)
 
 Create `.env` for custom configuration:
+
 ```env
 PORT=3000
 WS_PORT=8080
@@ -118,6 +119,7 @@ curl -X PUT http://localhost:3000/api/orders/1 \
 ```
 
 Or directly in the database:
+
 ```sql
 INSERT INTO orders (customer_name, product_name, status)
 VALUES ('Test Customer', 'Test Product', 'pending');
@@ -126,11 +128,13 @@ VALUES ('Test Customer', 'Test Product', 'pending');
 ## Why This Approach Works Better
 
 ### Traditional Real-time Solutions:
+
 - **Polling**: Client asks server every X seconds → Inefficient, delayed updates
 - **Server-Sent Events**: One-way only, limited functionality
 - **Message Queues**: Complex setup, additional infrastructure
 
 ### My PostgreSQL NOTIFY/LISTEN Solution:
+
 - **Database-level triggers**: Changes detected instantly at the source
 - **Zero polling**: Updates pushed only when changes occur
 - **Built into PostgreSQL**: No additional infrastructure needed
@@ -140,14 +144,17 @@ VALUES ('Test Customer', 'Test Product', 'pending');
 ## Troubleshooting
 
 **Database connection failed?**
+
 - Check PostgreSQL is running: `sudo systemctl status postgresql`
 - Verify credentials in `.env` file
 
 **WebSocket not connecting?**
+
 - Ensure port 8080 is available
 - Check browser console for errors
 
 **Triggers not working?**
+
 - Verify triggers exist: `\dft` in psql
 - Check PostgreSQL logs for errors
 

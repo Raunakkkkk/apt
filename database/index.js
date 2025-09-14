@@ -83,14 +83,12 @@ class DatabaseService {
    */
   async setupListener() {
     if (this.listenClient) {
-      console.log("Database listener already setup");
       return;
     }
 
     try {
       this.listenClient = new Client(this.dbConfig);
       await this.listenClient.connect();
-      console.log("Connected to PostgreSQL for LISTEN/NOTIFY");
 
       // Listen to orders_changes channel
       await this.listenClient.query(`LISTEN ${config.channels.ordersChanges}`);
@@ -98,7 +96,6 @@ class DatabaseService {
       // Handle notifications
       this.listenClient.on("notification", (msg) => {
         try {
-          console.log("Received notification:", msg);
           const payload = JSON.parse(msg.payload);
 
           // Emit to all registered handlers
@@ -118,7 +115,6 @@ class DatabaseService {
 
       // Handle connection end
       this.listenClient.on("end", () => {
-        console.log("PostgreSQL LISTEN connection ended");
         this.handleConnectionError();
       });
     } catch (error) {
@@ -162,7 +158,6 @@ class DatabaseService {
     if (this.listenClient) {
       try {
         await this.listenClient.end();
-        console.log("Database listener connection closed");
       } catch (error) {
         console.error("Error closing database listener:", error);
       } finally {
@@ -178,7 +173,6 @@ class DatabaseService {
   async testConnection() {
     try {
       const result = await this.query("SELECT NOW() as current_time");
-      console.log("Database connection test successful:", result.rows[0]);
       return true;
     } catch (error) {
       console.error("Database connection test failed:", error);
@@ -189,4 +183,3 @@ class DatabaseService {
 
 // Export singleton instance
 module.exports = new DatabaseService();
-

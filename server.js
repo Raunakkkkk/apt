@@ -58,28 +58,21 @@ app.use("/api/*", (req, res) => {
  */
 async function initializeServices() {
   try {
-    console.log("🚀 Starting Real-Time Orders System...");
-
     // Test database connection
-    console.log("📊 Testing database connection...");
     const dbConnected = await database.testConnection();
     if (!dbConnected) {
       console.warn(
         "⚠️ Database connection failed - running without database features"
       );
-      console.log("🔌 Initializing WebSocket service...");
       websocketService.init();
       websocketService.startHeartbeat();
-      console.log("✅ Services initialized (database disabled)");
       return;
     }
 
     // Setup database listener
-    console.log("👂 Setting up database listener...");
     await database.setupListener();
 
     // Initialize WebSocket service
-    console.log("🔌 Initializing WebSocket service...");
     websocketService.init();
 
     // Start periodic heartbeat
@@ -89,8 +82,6 @@ async function initializeServices() {
     database.onNotification((channel, payload) => {
       websocketService.broadcastDatabaseChange(channel, payload);
     });
-
-    console.log("✅ All services initialized successfully");
   } catch (error) {
     console.error("❌ Failed to initialize services:", error);
     process.exit(1);
@@ -119,18 +110,12 @@ function startHttpServer() {
  * Graceful shutdown handler
  */
 async function gracefulShutdown(signal) {
-  console.log(`\n📴 Received ${signal}. Starting graceful shutdown...`);
-
   try {
     // Close WebSocket server
-    console.log("🔌 Closing WebSocket connections...");
     await websocketService.close();
 
     // Close database listener
-    console.log("📊 Closing database connections...");
     await database.closeListener();
-
-    console.log("✅ Graceful shutdown completed");
     process.exit(0);
   } catch (error) {
     console.error("❌ Error during shutdown:", error);
@@ -157,11 +142,6 @@ process.on("unhandledRejection", (reason, promise) => {
 async function start() {
   await initializeServices();
   startHttpServer();
-
-  console.log("🎉 Real-Time Orders System is ready!");
-  console.log(
-    `📱 Open http://localhost:${config.server.port} to view the dashboard`
-  );
 }
 
 // Start the application
